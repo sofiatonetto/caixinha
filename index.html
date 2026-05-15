@@ -485,9 +485,9 @@
     <main id="mn"></main>
   </div>
   <div class="toast" id="toast"></div>
+  <iframe name="iframe-sync" style="display:none"></iframe>
   <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw6TOCKt8eLYTk2Odd2MGvAca1S6b5ofuV_P5RzzA3C9dIKTyD7sQJtbjTUOh_p76Sf/exec';
-    const MESES = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxYCqgYH4380nJW7ygAL9PYFuJq9gx99cZlW56-eaZH7Zongsue8jM-PVHrpEocFII/exec';    const MESES = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
     const fmt = v => 'R$ ' + Math.abs(v).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
     let pg = 'mo';
@@ -545,22 +545,24 @@
       setTimeout(function () { el.className = 'toast'; }, ms || 3000);
     }
 
-    async function sincronizar() {
-      if (!SCRIPT_URL || SCRIPT_URL.includes('COLE')) {
+    function sincronizar() {
+      if (!SCRIPT_URL || SCRIPT_URL.includes('https://script.google.com/macros/s/AKfycbw6TOCKt8eLYTk2Odd2MGvAca1S6b5ofuV_P5RzzA3C9dIKTyD7sQJtbjTUOh_p76Sf/exec')) {
         toast('Configure a URL do Apps Script primeiro!', 'err');
         return;
       }
-      try {
-        const res = await fetch(SCRIPT_URL, {
-          method: 'POST',
-          body: JSON.stringify({ acao: 'salvar', chave: getChave(), dados: getMesDados() })
-        });
-        const json = await res.json();
-        if (json.ok) toast('Salvo no Google Sheets!', 'ok');
-        else toast('Erro: ' + json.msg, 'err');
-      } catch (e) {
-        toast('Erro ao conectar com o Sheets.', 'err');
-      }
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = SCRIPT_URL;
+      form.target = 'iframe-sync';
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = 'payload';
+      input.value = JSON.stringify({ acao: 'salvar', chave: getChave(), dados: getMesDados() });
+      form.appendChild(input);
+      document.body.appendChild(form);
+      form.submit();
+      document.body.removeChild(form);
+      toast('Sincronizado com o Sheets!', 'ok');
     }
 
     function initSelects() {
