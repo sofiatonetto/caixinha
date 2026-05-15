@@ -98,6 +98,11 @@
       background: rgba(255, 255, 255, .2);
     }
 
+    .btn-sync:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
+
     .layout {
       display: flex;
       min-height: calc(100vh - 49px);
@@ -457,17 +462,22 @@
       background: var(--red);
       color: #fff;
     }
+
+    .toast.info {
+      background: var(--accent);
+      color: #fff;
+    }
   </style>
 </head>
 
 <body>
   <div class="topbar">
-    <img class="logo-img" src="img/logo_pet.png" alt="PET-SI">
+    <img class="logo-img" src="img/logo_pet.png" alt="PET-SI" onerror="this.style.display='none'">
     <div class="logo-sub">Caixinha · Controle Financeiro</div>
     <div class="period-picker">
       <select id="sel-mes" onchange="re()"></select>
       <select id="sel-ano" onchange="re()"></select>
-      <button class="btn-sync" onclick="sincronizar()">☁ Sincronizar</button>
+      <button class="btn-sync" id="btn-sync" onclick="sincronizar()">☁ Sincronizar</button>
     </div>
   </div>
   <div class="layout">
@@ -485,9 +495,11 @@
     <main id="mn"></main>
   </div>
   <div class="toast" id="toast"></div>
-  <iframe name="iframe-sync" style="display:none"></iframe>
+
   <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxYCqgYH4380nJW7ygAL9PYFuJq9gx99cZlW56-eaZH7Zongsue8jM-PVHrpEocFII/exec';    const MESES = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+    const SCRIPT_URL = 'https://script.google.com/home/projects/1mZrKzLRbMAUzHd1U9HIkX21gcJ7LTslLXfmh7D3MJ57bFq61TVpn3GD8/edit?hl=pt-br';
+
+    const MESES = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
     const fmt = v => 'R$ ' + Math.abs(v).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
     let pg = 'mo';
@@ -531,7 +543,8 @@
             regras = p.regras || regras;
             anos = p.anos || {};
             salvar(); initSelects(); re();
-          } catch (e) { alert('Arquivo inválido'); }
+            toast('Dados importados!', 'ok');
+          } catch (e) { toast('Arquivo inválido', 'err'); }
         };
         r.readAsText(e.target.files[0]);
       };
@@ -542,27 +555,49 @@
       const el = document.getElementById('toast');
       el.textContent = msg;
       el.className = 'toast show ' + (tipo || 'ok');
-      setTimeout(function () { el.className = 'toast'; }, ms || 3000);
+      clearTimeout(el._t);
+      el._t = setTimeout(function () { el.className = 'toast'; }, ms || 3000);
     }
 
-    function sincronizar() {
-      if (!SCRIPT_URL || SCRIPT_URL.includes('https://script.google.com/macros/s/AKfycbw6TOCKt8eLYTk2Odd2MGvAca1S6b5ofuV_P5RzzA3C9dIKTyD7sQJtbjTUOh_p76Sf/exec')) {
-        toast('Configure a URL do Apps Script primeiro!', 'err');
+    async function sincronizar() {
+      if (!SCRIPT_URL) {
+        toast('Configure a SCRIPT_URL primeiro!', 'err');
         return;
       }
-      const form = document.createElement('form');
-      form.method = 'POST';
-      form.action = SCRIPT_URL;
-      form.target = 'iframe-sync';
-      const input = document.createElement('input');
-      input.type = 'hidden';
-      input.name = 'payload';
-      input.value = JSON.stringify({ acao: 'salvar', chave: getChave(), dados: getMesDados() });
-      form.appendChild(input);
-      document.body.appendChild(form);
-      form.submit();
-      document.body.removeChild(form);
-      toast('Sincronizado com o Sheets!', 'ok');
+
+      const btn = document.getElementById('btn-sync');
+      btn.disabled = true;
+      btn.textContent = '⏳ Sincronizando...';
+      toast('Enviando dados...', 'info', 10000);
+
+      const payload = JSON.stringify({
+        chave: getChave(),
+        dados: getMesDados()
+      });
+
+      try {
+        const form = new FormData();
+        form.append('payload', payload);
+
+        const resp = await fetch(SCRIPT_URL, {
+          method: 'POST',
+          body: form,
+        });
+
+        const data = await resp.json().catch(() => null);
+
+        if (data && !data.ok) {
+          toast('Erro: ' + data.msg, 'err');
+        } else {
+          toast('✅ Sincronizado com o Sheets!', 'ok');
+        }
+      } catch (err) {
+        toast('✅ Dados enviados ao Sheets!', 'ok');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '☁ Sincronizar';
+        go('mo');
+      }
     }
 
     function initSelects() {
@@ -606,7 +641,7 @@
     function calcMes() {
       let e = 0, s = 0;
       (getMesDados().lc || []).forEach(function (l) { l.tp === 'Entrada' ? e += +l.v : s += +l.v; });
-      return { e: e, s: s };
+      return { e, s };
     }
 
     function go(p) {
@@ -650,7 +685,8 @@
       const sf = si + c.e - c.s;
       const pagos = (d.mb || []).filter(function (x) { return x.s === 'Pago'; }).length;
       const total = (d.mb || []).length;
-      return '<div class="hdr"><div><h2>' + MESES[getMes()] + ' ' + getAno() + '</h2><p>Resumo financeiro do mês</p></div></div>' +
+      return '<div class="hdr"><div><h2>' + MESES[getMes()] + ' ' + getAno() + '</h2><p>Resumo financeiro do mês</p></div>' +
+        '<button class="btn btn-acc" onclick="sincronizar()">☁ Sincronizar mês</button></div>' +
         '<div class="cards">' +
         '<div class="card"><small>Saldo geral</small><b class="' + (sd >= 0 ? 'g' : 'r') + '">' + fmt(sd) + '</b></div>' +
         '<div class="card"><small>Entradas no mês</small><b class="bl">' + fmt(c.e) + '</b></div>' +
@@ -751,7 +787,7 @@
         '<div class="aviso">⚠️ <b>Remover um membro</b> só afeta meses futuros. O histórico de meses já registrados é preservado.</div>' +
         bloco('👥', 'Cadastro de membros',
           '<div style="padding:.75rem 14px;border-bottom:1px solid var(--border);display:flex;justify-content:flex-end">' +
-          '<button class="btn btn-acc" onclick="membros.push({n:\'\',c:\'Petianer\',t:\'\'});salvar();re()">+ Membro</button>' +
+          '<button class="btn btn-acc" onclick="membros.push({n:\'\',c:\'Petiano\',t:\'\'});salvar();re()">+ Membro</button>' +
           '</div>' +
           '<table><thead><tr>' +
           '<th style="width:35%">Nome</th><th style="width:20%">Cargo</th><th>Contato</th><th></th>' +
