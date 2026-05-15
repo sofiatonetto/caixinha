@@ -1,73 +1,107 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Caixinha PET-SI</title>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap"
+    rel="stylesheet">
   <style>
     :root {
-      --bg:      #f7f6f3;
+      --bg: #f7f6f3;
       --surface: #ffffff;
-      --border:  #e4e2db;
+      --border: #e4e2db;
       --border2: #d0cec6;
-      --text:    #1a1917;
-      --text2:   #6b6860;
-      --text3:   #a8a69f;
-      --accent:  #0d6efd;
-      --green:   #1a7f4b;
-      --green-bg:#d4edda;
-      --red:     #9b2335;
-      --red-bg:  #fde8eb;
-      --blue-bg: #dbeafe;
-      --navy:    #0d1b2a;
+      --text: #1a1917;
+      --text2: #6b6860;
+      --text3: #a8a69f;
+      --accent: #0d6efd;
+      --green: #1a7f4b;
+      --red: #9b2335;
+      --navy: #0d1b2a;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     body {
       font-family: 'DM Sans', sans-serif;
       background: var(--bg);
       color: var(--text);
-      min-height: 100vh;
       font-size: 14px;
+      min-height: 100vh;
     }
 
     .topbar {
       background: var(--navy);
-      border-bottom: 1px solid rgba(255,255,255,.08);
-      padding: .6rem 2rem;
+      padding: .5rem 1.5rem;
       display: flex;
       align-items: center;
       gap: 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, .08);
     }
+
     .logo-img {
-      height: 44px;
-      border-radius: 8px;
+      height: 32px;
+      border-radius: 6px;
       object-fit: contain;
     }
+
     .logo-sub {
       font-size: 11px;
-      color: rgba(255,255,255,.5);
+      color: rgba(255, 255, 255, .5);
       letter-spacing: .08em;
       text-transform: uppercase;
     }
-    .selects { margin-left: auto; display: flex; gap: 8px; }
 
-    .topbar select {
-      background: rgba(255,255,255,.08);
-      border: 1px solid rgba(255,255,255,.15);
+    .period-picker {
+      margin-left: auto;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .period-picker select {
+      background: rgba(255, 255, 255, .1);
+      border: 1px solid rgba(255, 255, 255, .2);
       color: #fff;
-      padding: 6px 12px;
-      border-radius: 6px;
+      padding: 6px 10px;
+      border-radius: 8px;
       font-size: 13px;
       font-family: 'DM Sans', sans-serif;
       cursor: pointer;
       outline: none;
+      min-width: 80px;
     }
-    .topbar select:focus { border-color: rgba(255,255,255,.4); }
-    .topbar select option { background: var(--navy); color: #fff; }
-    .layout { display: flex; min-height: calc(100vh - 57px); }
+
+    .period-picker select option {
+      background: var(--navy);
+    }
+
+    .btn-sync {
+      font-size: 12px;
+      padding: 6px 14px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, .2);
+      background: rgba(255, 255, 255, .1);
+      cursor: pointer;
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      transition: all .15s;
+    }
+
+    .btn-sync:hover {
+      background: rgba(255, 255, 255, .2);
+    }
+
+    .layout {
+      display: flex;
+      min-height: calc(100vh - 49px);
+    }
 
     nav {
       width: 200px;
@@ -99,10 +133,24 @@
       border-left: 2px solid transparent;
       transition: all .15s;
     }
-    .nb:hover { background: var(--bg); color: var(--text); }
-    .nb.on    { background: var(--bg); color: var(--accent); border-left-color: var(--accent); font-weight: 500; }
 
-    main { flex: 1; padding: 2rem; overflow-y: auto; max-width: 900px; }
+    .nb:hover {
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .nb.on {
+      background: var(--bg);
+      color: var(--accent);
+      border-left-color: var(--accent);
+      font-weight: 500;
+    }
+
+    main {
+      flex: 1;
+      padding: 2rem;
+      max-width: 900px;
+    }
 
     .hdr {
       display: flex;
@@ -110,8 +158,18 @@
       align-items: flex-start;
       margin-bottom: 1.5rem;
     }
-    .hdr h2 { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; color: var(--text); }
-    .hdr p  { font-size: 12px; color: var(--text3); margin-top: 2px; }
+
+    .hdr h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .hdr p {
+      font-size: 12px;
+      color: var(--text3);
+      margin-top: 2px;
+    }
 
     .cards {
       display: grid;
@@ -119,12 +177,14 @@
       gap: 12px;
       margin-bottom: 1.5rem;
     }
+
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 10px;
       padding: 1rem 1.25rem;
     }
+
     .card small {
       display: block;
       font-size: 10px;
@@ -133,11 +193,24 @@
       letter-spacing: .06em;
       margin-bottom: 6px;
     }
-    .card b { font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; }
 
-    .g  { color: var(--green); }
-    .r  { color: var(--red); }
-    .bl { color: var(--accent); }
+    .card b {
+      font-size: 22px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .g {
+      color: var(--green);
+    }
+
+    .r {
+      color: var(--red);
+    }
+
+    .bl {
+      color: var(--accent);
+    }
 
     .bk {
       background: var(--surface);
@@ -146,6 +219,7 @@
       margin-bottom: 1rem;
       overflow: hidden;
     }
+
     .bh {
       display: flex;
       justify-content: space-between;
@@ -155,11 +229,24 @@
       border-bottom: 1px solid var(--border);
       transition: background .15s;
     }
-    .bh:hover { background: var(--bg); }
-    .bh b     { font-size: 13px; color: var(--text); }
-    .bd.h     { display: none; }
 
-    table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+    .bh:hover {
+      background: var(--bg);
+    }
+
+    .bh b {
+      font-size: 13px;
+    }
+
+    .bd.h {
+      display: none;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
 
     th {
       padding: 7px 12px;
@@ -176,12 +263,18 @@
       padding: 7px 12px;
       border-bottom: 1px solid var(--border);
       vertical-align: middle;
-      color: var(--text);
     }
-    tr:last-child td { border-bottom: none; }
-    tr:hover td      { background: #faf9f7; }
 
-    td input, td select {
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background: #faf9f7;
+    }
+
+    td input,
+    td select {
       width: 100%;
       border: none;
       background: transparent;
@@ -190,7 +283,12 @@
       font-family: 'DM Sans', sans-serif;
       outline: none;
     }
-    td input:focus { background: #f0ede8; border-radius: 4px; padding: 1px 6px; }
+
+    td input:focus {
+      background: #f0ede8;
+      border-radius: 4px;
+      padding: 1px 6px;
+    }
 
     .rr {
       display: flex;
@@ -199,9 +297,20 @@
       padding: 9px 14px;
       border-bottom: 1px solid var(--border);
     }
-    .rr:last-child { border-bottom: none; }
-    .rr span { font-size: 13px; color: var(--text2); }
-    .rr b    { font-size: 14px; font-variant-numeric: tabular-nums; }
+
+    .rr:last-child {
+      border-bottom: none;
+    }
+
+    .rr span {
+      font-size: 13px;
+      color: var(--text2);
+    }
+
+    .rr b {
+      font-size: 14px;
+      font-variant-numeric: tabular-nums;
+    }
 
     textarea {
       width: 100%;
@@ -216,8 +325,14 @@
       line-height: 1.6;
       color: var(--text);
     }
-    textarea:focus        { background: var(--bg); }
-    textarea::placeholder { color: var(--text3); }
+
+    textarea:focus {
+      background: var(--bg);
+    }
+
+    textarea::placeholder {
+      color: var(--text3);
+    }
 
     .btn {
       font-size: 12px;
@@ -230,14 +345,40 @@
       font-family: 'DM Sans', sans-serif;
       transition: all .15s;
     }
-    .btn:hover     { background: var(--bg); color: var(--text); }
-    .btn-acc       { border-color: var(--accent); color: var(--accent); }
-    .btn-acc:hover { background: var(--accent); color: #fff; }
 
-    .del { border: none; background: none; color: var(--text3); cursor: pointer; font-size: 16px; padding: 0 2px; transition: color .15s; }
-    .del:hover { color: var(--red); }
+    .btn:hover {
+      background: var(--bg);
+      color: var(--text);
+    }
 
-    .fi { margin-bottom: .875rem; }
+    .btn-acc {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .btn-acc:hover {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .del {
+      border: none;
+      background: none;
+      color: var(--text3);
+      cursor: pointer;
+      font-size: 16px;
+      padding: 0 2px;
+      transition: color .15s;
+    }
+
+    .del:hover {
+      color: var(--red);
+    }
+
+    .fi {
+      margin-bottom: .875rem;
+    }
+
     .fi label {
       display: block;
       font-size: 10px;
@@ -246,7 +387,9 @@
       letter-spacing: .05em;
       margin-bottom: 4px;
     }
-    .fi input, .fi textarea {
+
+    .fi input,
+    .fi textarea {
       width: 100%;
       border: 1px solid var(--border);
       border-radius: 6px;
@@ -257,71 +400,120 @@
       background: var(--surface);
       outline: none;
     }
-    .fi input:focus, .fi textarea:focus { border-color: var(--accent); }
-    .fi textarea { min-height: 70px; resize: vertical; }
 
-    .empty { text-align: center; color: var(--text3); padding: 1.5rem; font-size: 13px; }
+    .fi input:focus,
+    .fi textarea:focus {
+      border-color: var(--accent);
+    }
+
+    .fi textarea {
+      min-height: 70px;
+      resize: vertical;
+    }
+
+    .empty {
+      text-align: center;
+      color: var(--text3);
+      padding: 1.5rem;
+      font-size: 13px;
+    }
+
+    .aviso {
+      background: #fff8e1;
+      border: 1px solid #ffe082;
+      border-radius: 8px;
+      padding: .75rem 1rem;
+      margin-bottom: 1rem;
+      font-size: 13px;
+      color: #7a5c00;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      padding: .75rem 1.25rem;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: all .3s;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .toast.ok {
+      background: var(--green);
+      color: #fff;
+    }
+
+    .toast.err {
+      background: var(--red);
+      color: #fff;
+    }
   </style>
 </head>
-<body>
 
+<body>
   <div class="topbar">
-    <img class="logo-img" src="https://www.google.com/url?sa=t&source=web&rct=j&url=https%3A%2F%2Fwww.ufsm.br%2Fpet%2Fsistemas-de-informacao&ved=0CBYQjRxqFwoTCLDogbS8uZQDFQAAAAAdAAAAABAd&opi=89978449">
-      <div class="logo-sub">Caixinha · Controle Financeiro</div>
-    </div>
-    <div class="selects">
-      <select id="sel-ano" onchange="re()"></select>
+    <img class="logo-img" src="img/logo_pet.png" alt="PET-SI">
+    <div class="logo-sub">Caixinha · Controle Financeiro</div>
+    <div class="period-picker">
       <select id="sel-mes" onchange="re()"></select>
+      <select id="sel-ano" onchange="re()"></select>
+      <button class="btn-sync" onclick="sincronizar()">☁ Sincronizar</button>
     </div>
   </div>
-
   <div class="layout">
-
     <nav>
       <div class="nl">Menu</div>
       <button class="nb on" id="nb-mo" onclick="go('mo')">💰 Mês atual</button>
-      <button class="nb"    id="nb-mb" onclick="go('mb')">👥 Membros</button>
-      <button class="nb"    id="nb-lc" onclick="go('lc')">📋 Lançamentos</button>
-      <button class="nb"    id="nb-cp" onclick="go('cp')">🛒 Compras</button>
-      <button class="nb"    id="nb-rg" onclick="go('rg')">⚙️ Regras</button>
+      <button class="nb" id="nb-mb" onclick="go('mb')">👥 Membros</button>
+      <button class="nb" id="nb-lc" onclick="go('lc')">📋 Lançamentos</button>
+      <button class="nb" id="nb-cp" onclick="go('cp')">🛒 Compras</button>
+      <button class="nb" id="nb-rg" onclick="go('rg')">⚙️ Regras</button>
       <div class="nl" style="margin-top:1rem">Dados</div>
       <button class="nb" onclick="exportar()">⬇ Exportar</button>
       <button class="nb" onclick="importar()">⬆ Importar</button>
     </nav>
-
     <main id="mn"></main>
   </div>
-
+  <div class="toast" id="toast"></div>
   <script>
-    const MESES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho',
-                   'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-
-    const fmt = v =>
-      'R$ ' + Math.abs(v).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw6BJfyX1NbWVm9HfnAbbv4UdjOYF_n0qzp2RvFw6FXiEHfHY3Cf_FbQT8GGB2tCqmU/exec';
+    const MESES = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+    const fmt = v => 'R$ ' + Math.abs(v).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
     let pg = 'mo';
-
-    let S = {
-      mb:   [],
-      rg:   { v: '40', d: '10', r: '', a: 'Gastos acima de R$100 precisam de aprovação do grupo.', o: '' },
-      anos: {}
-    };
-
+    let membros = [];
+    let regras = { v: '40', d: '10', r: '', a: '', o: '' };
+    let anos = {};
 
     function carregar() {
       try {
         const d = localStorage.getItem('cpsi');
-        if (d) S = JSON.parse(d);
-      } catch (e) {}
+        if (d) {
+          const p = JSON.parse(d);
+          membros = p.membros || [];
+          regras = p.regras || regras;
+          anos = p.anos || {};
+        }
+      } catch (e) { }
     }
 
     function salvar() {
-      localStorage.setItem('cpsi', JSON.stringify(S));
+      localStorage.setItem('cpsi', JSON.stringify({ membros, regras, anos }));
     }
 
     function exportar() {
       const a = document.createElement('a');
-      a.href = 'data:application/json,' + encodeURIComponent(JSON.stringify(S, null, 2));
+      a.href = 'data:application/json,' + encodeURIComponent(JSON.stringify({ membros, regras, anos }, null, 2));
       a.download = 'caixinha_backup.json';
       a.click();
     }
@@ -330,77 +522,94 @@
       const inp = document.createElement('input');
       inp.type = 'file';
       inp.accept = '.json';
-      inp.onchange = e => {
-        const reader = new FileReader();
-        reader.onload = ev => {
+      inp.onchange = function (e) {
+        const r = new FileReader();
+        r.onload = function (ev) {
           try {
-            S = JSON.parse(ev.target.result);
-            salvar();
-            initSelects();
-            re();
+            const p = JSON.parse(ev.target.result);
+            membros = p.membros || [];
+            regras = p.regras || regras;
+            anos = p.anos || {};
+            salvar(); initSelects(); re();
           } catch (e) { alert('Arquivo inválido'); }
         };
-        reader.readAsText(e.target.files[0]);
+        r.readAsText(e.target.files[0]);
       };
       inp.click();
     }
 
-
-    function initSelects() {
-      const sa  = document.getElementById('sel-ano');
-      const sm  = document.getElementById('sel-mes');
-      const cur = new Date();
-      const anos = [cur.getFullYear() - 1, cur.getFullYear(), cur.getFullYear() + 1];
-
-      sa.innerHTML = anos.map(a =>
-        `<option value="${a}"${a === cur.getFullYear() ? ' selected' : ''}>${a}</option>`
-      ).join('');
-
-      sm.innerHTML = MESES.map((mn, i) =>
-        `<option value="${i}"${i === cur.getMonth() ? ' selected' : ''}>${mn}</option>`
-      ).join('');
+    function toast(msg, tipo, ms) {
+      const el = document.getElementById('toast');
+      el.textContent = msg;
+      el.className = 'toast show ' + (tipo || 'ok');
+      setTimeout(function () { el.className = 'toast'; }, ms || 3000);
     }
 
-    function getAno()   { return document.getElementById('sel-ano').value; }
-    function getMes()   { return parseInt(document.getElementById('sel-mes').value); }
-    function getChave() { return `${getAno()}-${getMes()}`; }
+    async function sincronizar() {
+      if (!SCRIPT_URL || SCRIPT_URL.includes('COLE')) {
+        toast('Configure a URL do Apps Script primeiro!', 'err');
+        return;
+      }
+      try {
+        const res = await fetch(SCRIPT_URL, {
+          method: 'POST',
+          body: JSON.stringify({ acao: 'salvar', chave: getChave(), dados: getMesDados() })
+        });
+        const json = await res.json();
+        if (json.ok) toast('Salvo no Google Sheets!', 'ok');
+        else toast('Erro: ' + json.msg, 'err');
+      } catch (e) {
+        toast('Erro ao conectar com o Sheets.', 'err');
+      }
+    }
 
+    function initSelects() {
+      const sm = document.getElementById('sel-mes');
+      const sa = document.getElementById('sel-ano');
+      const cur = new Date();
+      sm.innerHTML = MESES.map(function (mn, i) {
+        return '<option value="' + i + '"' + (i === cur.getMonth() ? ' selected' : '') + '>' + mn + '</option>';
+      }).join('');
+      sa.innerHTML = '';
+      for (let a = cur.getFullYear() - 2; a <= cur.getFullYear() + 3; a++) {
+        sa.innerHTML += '<option value="' + a + '"' + (a === cur.getFullYear() ? ' selected' : '') + '>' + a + '</option>';
+      }
+    }
+
+    function getAno() { return document.getElementById('sel-ano').value; }
+    function getMes() { return parseInt(document.getElementById('sel-mes').value); }
+    function getChave() { return getAno() + '-' + getMes(); }
 
     function getMesDados() {
       const k = getChave();
-      if (!S.anos[k]) {
-        S.anos[k] = {
-          mb: S.mb.map(x => ({ n: x.n, v: parseFloat(S.rg.v) || 40, d: '', s: 'Pendente', o: '' })),
+      if (!anos[k]) {
+        anos[k] = {
+          mb: membros.map(function (x) { return { n: x.n, v: parseFloat(regras.v) || 40, d: '', s: 'Pendente', o: '' }; }),
           lc: [],
           cp: [],
-          o:  ''
+          o: ''
         };
       }
-      return S.anos[k];
+      return anos[k];
     }
 
     function calcSaldoGeral() {
-      let total = 0;
-      for (let k in S.anos) {
-        (S.anos[k].lc || []).forEach(l => {
-          total += l.tp === 'Entrada' ? +l.v : -(+l.v);
-        });
+      let t = 0;
+      for (let k in anos) {
+        (anos[k].lc || []).forEach(function (l) { t += l.tp === 'Entrada' ? +l.v : -(+l.v); });
       }
-      return total;
+      return t;
     }
 
     function calcMes() {
       let e = 0, s = 0;
-      (getMesDados().lc || []).forEach(l => {
-        l.tp === 'Entrada' ? e += +l.v : s += +l.v;
-      });
-      return { e, s };
+      (getMesDados().lc || []).forEach(function (l) { l.tp === 'Entrada' ? e += +l.v : s += +l.v; });
+      return { e: e, s: s };
     }
-
 
     function go(p) {
       pg = p;
-      ['mo','mb','lc','cp','rg'].forEach(x => {
+      ['mo', 'mb', 'lc', 'cp', 'rg'].forEach(function (x) {
         const b = document.getElementById('nb-' + x);
         if (b) b.classList.toggle('on', x === p);
       });
@@ -409,281 +618,152 @@
 
     function re() {
       const el = document.getElementById('mn');
-      if      (pg === 'mo') el.innerHTML = paginaMes();
+      if (pg === 'mo') el.innerHTML = paginaMes();
       else if (pg === 'mb') el.innerHTML = paginaMembros();
       else if (pg === 'lc') el.innerHTML = paginaLancamentos();
       else if (pg === 'cp') el.innerHTML = paginaCompras();
-      else                  el.innerHTML = paginaRegras();
+      else el.innerHTML = paginaRegras();
     }
-
 
     function sel(opcoes, atual, fn) {
       return '<select onchange="' + fn + '">' +
-        opcoes.map(o => `<option${o === atual ? ' selected' : ''}>${o}</option>`).join('') +
+        opcoes.map(function (o) { return '<option' + (o === atual ? ' selected' : '') + '>' + o + '</option>'; }).join('') +
         '</select>';
     }
 
     function vazio(cols, msg) {
-      return `<tr><td colspan="${cols}" class="empty">${msg || 'Nenhum registro. Clique em "+ Adicionar".'}</td></tr>`;
+      return '<tr><td colspan="' + cols + '" class="empty">' + (msg || 'Nenhum registro. Clique em &quot;+ Adicionar&quot;.') + '</td></tr>';
     }
 
-    function bloco(icone, titulo, conteudo, fnAdicionar) {
-      const btnAdd = fnAdicionar
-        ? `<button class="btn btn-acc" onclick="event.stopPropagation();${fnAdicionar}">+ Adicionar</button>`
-        : '';
-      return `
-        <div class="bk">
-          <div class="bh" onclick="toggleBloco(this)">
-            <b>${icone} ${titulo}</b>
-            <div style="display:flex;gap:8px;align-items:center">
-              ${btnAdd}
-              <span style="color:var(--text3);font-size:12px">▾</span>
-            </div>
-          </div>
-          <div class="bd">${conteudo}</div>
-        </div>`;
+    function bloco(ic, ti, ct, fn) {
+      const btn = fn ? '<button class="btn btn-acc" onclick="event.stopPropagation();' + fn + '">+ Adicionar</button>' : '';
+      return '<div class="bk"><div class="bh" onclick="this.nextElementSibling.classList.toggle(\'h\')"><b>' + ic + ' ' + ti + '</b><div style="display:flex;gap:8px;align-items:center">' + btn + '<span style="color:var(--text3)">▾</span></div></div><div class="bd">' + ct + '</div></div>';
     }
-
-    function toggleBloco(h) {
-      h.nextElementSibling.classList.toggle('h');
-    }
-
 
     function paginaMes() {
-      const d        = getMesDados();
-      const { e, s } = calcMes();
-      const saldo    = calcSaldoGeral();
-      const si       = saldo - e + s;
-      const sf       = si + e - s;
-      const pagos    = (d.mb || []).filter(x => x.s === 'Pago').length;
-      const total    = (d.mb || []).length;
-
-      return `
-        <div class="hdr">
-          <div>
-            <h2>${MESES[getMes()]} ${getAno()}</h2>
-            <p>Resumo financeiro do mês</p>
-          </div>
-        </div>
-
-        <div class="cards">
-          <div class="card">
-            <small>Saldo geral</small>
-            <b class="${saldo >= 0 ? 'g' : 'r'}">${fmt(saldo)}</b>
-          </div>
-          <div class="card">
-            <small>Entradas no mês</small>
-            <b class="bl">${fmt(e)}</b>
-          </div>
-          <div class="card">
-            <small>Saídas no mês</small>
-            <b class="r">${fmt(s)}</b>
-          </div>
-        </div>
-
-        ${bloco('📊', 'Resumo do mês', `
-          <div class="rr"><span>Saldo inicial</span><b>${fmt(si)}</b></div>
-          <div class="rr"><span>Entradas</span><b class="g">${fmt(e)}</b></div>
-          <div class="rr"><span>Saídas</span><b class="r">${fmt(s)}</b></div>
-          <div class="rr" style="background:var(--bg)">
-            <span style="font-weight:600">Saldo final</span>
-            <b class="${sf >= 0 ? 'g' : 'r'}" style="font-size:18px">${fmt(sf)}</b>
-          </div>
-          <div class="rr">
-            <span>Contribuições recebidas</span>
-            <b>${pagos} / ${total} membros</b>
-          </div>
-        `, null)}
-
-        ${bloco('📝', 'Observações do mês', `
-          <textarea
-            placeholder="Anote decisões, atas, aprovações de gastos..."
-            onchange="getMesDados().o = this.value; salvar();"
-          >${d.o}</textarea>
-        `, null)}`;
+      const d = getMesDados();
+      const c = calcMes();
+      const sd = calcSaldoGeral();
+      const si = sd - c.e + c.s;
+      const sf = si + c.e - c.s;
+      const pagos = (d.mb || []).filter(function (x) { return x.s === 'Pago'; }).length;
+      const total = (d.mb || []).length;
+      return '<div class="hdr"><div><h2>' + MESES[getMes()] + ' ' + getAno() + '</h2><p>Resumo financeiro do mês</p></div></div>' +
+        '<div class="cards">' +
+        '<div class="card"><small>Saldo geral</small><b class="' + (sd >= 0 ? 'g' : 'r') + '">' + fmt(sd) + '</b></div>' +
+        '<div class="card"><small>Entradas no mês</small><b class="bl">' + fmt(c.e) + '</b></div>' +
+        '<div class="card"><small>Saídas no mês</small><b class="r">' + fmt(c.s) + '</b></div>' +
+        '</div>' +
+        bloco('📊', 'Resumo do mês',
+          '<div class="rr"><span>Saldo inicial</span><b>' + fmt(si) + '</b></div>' +
+          '<div class="rr"><span>Entradas</span><b class="g">' + fmt(c.e) + '</b></div>' +
+          '<div class="rr"><span>Saídas</span><b class="r">' + fmt(c.s) + '</b></div>' +
+          '<div class="rr" style="background:var(--bg)"><span style="font-weight:600">Saldo final</span><b class="' + (sf >= 0 ? 'g' : 'r') + '" style="font-size:18px">' + fmt(sf) + '</b></div>' +
+          '<div class="rr"><span>Contribuições recebidas</span><b>' + pagos + ' / ' + total + ' membros</b></div>'
+          , null) +
+        bloco('📝', 'Observações do mês',
+          '<textarea placeholder="Anote decisões, atas, aprovações de gastos..." onchange="getMesDados().o=this.value;salvar()">' + d.o + '</textarea>'
+          , null);
     }
 
     function paginaMembros() {
       const d = getMesDados();
-      const rows = (d.mb || []).map((x, i) => `
-        <tr>
-          <td><input value="${x.n}" onchange="getMesDados().mb[${i}].n=this.value;salvar()" placeholder="Nome"></td>
-          <td><input type="number" value="${x.v}" onchange="getMesDados().mb[${i}].v=this.value;salvar()"></td>
-          <td><input type="date" value="${x.d}" onchange="getMesDados().mb[${i}].d=this.value;salvar()"></td>
-          <td>${sel(['Pago','Pendente','Isento'], x.s, `getMesDados().mb[${i}].s=this.value;salvar();re()`)}</td>
-          <td><input value="${x.o}" onchange="getMesDados().mb[${i}].o=this.value;salvar()" placeholder="—"></td>
-          <td style="width:32px"><button class="del" onclick="getMesDados().mb.splice(${i},1);salvar();re()">×</button></td>
-        </tr>`).join('');
-
-      return `
-        <div class="hdr">
-          <div>
-            <h2>👥 Membros</h2>
-            <p>${MESES[getMes()]} ${getAno()}</p>
-          </div>
-          <button class="btn btn-acc" onclick="getMesDados().mb.push({n:'',v:parseFloat(S.rg.v)||40,d:'',s:'Pendente',o:''});salvar();re()">
-            + Adicionar membro
-          </button>
-        </div>
-
-        ${bloco('👥', 'Contribuições do mês', `
-          <table>
-            <thead>
-              <tr>
-                <th style="width:22%">Nome</th>
-                <th style="width:12%">Valor R$</th>
-                <th style="width:16%">Data pag.</th>
-                <th style="width:13%">Status</th>
-                <th>Obs.</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>${rows || vazio(6)}</tbody>
-          </table>
-        `, null)}`;
+      const rows = (d.mb || []).map(function (x, i) {
+        return '<tr>' +
+          '<td><input value="' + x.n + '" onchange="getMesDados().mb[' + i + '].n=this.value;salvar()" placeholder="Nome"></td>' +
+          '<td><input type="number" value="' + x.v + '" onchange="getMesDados().mb[' + i + '].v=this.value;salvar()"></td>' +
+          '<td><input type="date" value="' + x.d + '" onchange="getMesDados().mb[' + i + '].d=this.value;salvar()"></td>' +
+          '<td>' + sel(['Pago', 'Pendente', 'Isento'], x.s, 'getMesDados().mb[' + i + '].s=this.value;salvar();re()') + '</td>' +
+          '<td><input value="' + x.o + '" onchange="getMesDados().mb[' + i + '].o=this.value;salvar()" placeholder="—"></td>' +
+          '<td style="width:32px"><button class="del" onclick="getMesDados().mb.splice(' + i + ',1);salvar();re()">×</button></td>' +
+          '</tr>';
+      }).join('');
+      return '<div class="hdr"><div><h2>👥 Membros</h2><p>' + MESES[getMes()] + ' ' + getAno() + '</p></div>' +
+        '<button class="btn btn-acc" onclick="getMesDados().mb.push({n:\'\',v:parseFloat(regras.v)||40,d:\'\',s:\'Pendente\',o:\'\'});salvar();re()">+ Adicionar membro</button></div>' +
+        bloco('👥', 'Contribuições do mês',
+          '<table><thead><tr>' +
+          '<th style="width:22%">Nome</th><th style="width:12%">Valor R$</th>' +
+          '<th style="width:16%">Data pag.</th><th style="width:13%">Status</th>' +
+          '<th>Obs.</th><th></th>' +
+          '</tr></thead><tbody>' + (rows || vazio(6)) + '</tbody></table>'
+          , null);
     }
 
     function paginaLancamentos() {
       const d = getMesDados();
-      const rows = (d.lc || []).map((x, i) => `
-        <tr>
-          <td><input value="${x.n}" onchange="getMesDados().lc[${i}].n=this.value;salvar()" placeholder="Descrição"></td>
-          <td><input type="date" value="${x.d}" onchange="getMesDados().lc[${i}].d=this.value;salvar()"></td>
-          <td>${sel(['Entrada','Saída'], x.tp, `getMesDados().lc[${i}].tp=this.value;salvar();re()`)}</td>
-          <td>${sel(['Contribuição','Consumíveis','Manutenção','Equipamento','Evento','Outro'], x.ct, `getMesDados().lc[${i}].ct=this.value;salvar()`)}</td>
-          <td><input type="number" value="${x.v}" onchange="getMesDados().lc[${i}].v=this.value;salvar();re()"></td>
-          <td><input value="${x.q}" onchange="getMesDados().lc[${i}].q=this.value;salvar()" placeholder="—"></td>
-          <td style="width:32px"><button class="del" onclick="getMesDados().lc.splice(${i},1);salvar();re()">×</button></td>
-        </tr>`).join('');
-
-      return `
-        <div class="hdr">
-          <div>
-            <h2>📋 Lançamentos</h2>
-            <p>${MESES[getMes()]} ${getAno()}</p>
-          </div>
-          <button class="btn btn-acc" onclick="getMesDados().lc.push({n:'',d:'',tp:'Saída',ct:'Consumíveis',v:0,q:''});salvar();re()">
-            + Adicionar lançamento
-          </button>
-        </div>
-
-        ${bloco('📋', 'Lançamentos do mês', `
-          <table>
-            <thead>
-              <tr>
-                <th style="width:20%">Descrição</th>
-                <th style="width:13%">Data</th>
-                <th style="width:11%">Tipo</th>
-                <th style="width:15%">Categoria</th>
-                <th style="width:11%">Valor</th>
-                <th>Pago por</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>${rows || vazio(7)}</tbody>
-          </table>
-        `, null)}`;
+      const rows = (d.lc || []).map(function (x, i) {
+        return '<tr>' +
+          '<td><input value="' + x.n + '" onchange="getMesDados().lc[' + i + '].n=this.value;salvar()" placeholder="Descrição"></td>' +
+          '<td><input type="date" value="' + x.d + '" onchange="getMesDados().lc[' + i + '].d=this.value;salvar()"></td>' +
+          '<td>' + sel(['Entrada', 'Saída'], x.tp, 'getMesDados().lc[' + i + '].tp=this.value;salvar();re()') + '</td>' +
+          '<td>' + sel(['Contribuição', 'Consumíveis', 'Manutenção', 'Equipamento', 'Evento', 'Outro'], x.ct, 'getMesDados().lc[' + i + '].ct=this.value;salvar()') + '</td>' +
+          '<td><input type="number" value="' + x.v + '" onchange="getMesDados().lc[' + i + '].v=this.value;salvar();re()"></td>' +
+          '<td><input value="' + x.q + '" onchange="getMesDados().lc[' + i + '].q=this.value;salvar()" placeholder="—"></td>' +
+          '<td style="width:32px"><button class="del" onclick="getMesDados().lc.splice(' + i + ',1);salvar();re()">×</button></td>' +
+          '</tr>';
+      }).join('');
+      return '<div class="hdr"><div><h2>📋 Lançamentos</h2><p>' + MESES[getMes()] + ' ' + getAno() + '</p></div>' +
+        '<button class="btn btn-acc" onclick="getMesDados().lc.push({n:\'\',d:\'\',tp:\'Saída\',ct:\'Consumíveis\',v:0,q:\'\'});salvar();re()">+ Adicionar lançamento</button></div>' +
+        bloco('📋', 'Lançamentos do mês',
+          '<table><thead><tr>' +
+          '<th style="width:20%">Descrição</th><th style="width:13%">Data</th>' +
+          '<th style="width:11%">Tipo</th><th style="width:15%">Categoria</th>' +
+          '<th style="width:11%">Valor</th><th>Pago por</th><th></th>' +
+          '</tr></thead><tbody>' + (rows || vazio(7)) + '</tbody></table>'
+          , null);
     }
 
     function paginaCompras() {
       const d = getMesDados();
-      const rows = (d.cp || []).map((x, i) => `
-        <tr>
-          <td><input value="${x.n}" onchange="getMesDados().cp[${i}].n=this.value;salvar()" placeholder="Item"></td>
-          <td><input type="number" value="${x.q}" onchange="getMesDados().cp[${i}].q=this.value;salvar()"></td>
-          <td><input type="number" value="${x.v}" onchange="getMesDados().cp[${i}].v=this.value;salvar()"></td>
-          <td>${sel(['Urgente','Normal','Quando puder'], x.p, `getMesDados().cp[${i}].p=this.value;salvar()`)}</td>
-          <td>${sel(['Comprar','Comprado','Cancelado'], x.s, `getMesDados().cp[${i}].s=this.value;salvar()`)}</td>
-          <td style="width:32px"><button class="del" onclick="getMesDados().cp.splice(${i},1);salvar();re()">×</button></td>
-        </tr>`).join('');
-
-      return `
-        <div class="hdr">
-          <div>
-            <h2>🛒 Lista de compras</h2>
-            <p>${MESES[getMes()]} ${getAno()}</p>
-          </div>
-          <button class="btn btn-acc" onclick="getMesDados().cp.push({n:'',q:1,v:0,p:'Normal',s:'Comprar'});salvar();re()">
-            + Adicionar item
-          </button>
-        </div>
-
-        ${bloco('🛒', 'Itens para comprar', `
-          <table>
-            <thead>
-              <tr>
-                <th style="width:28%">Item</th>
-                <th style="width:9%">Qtd</th>
-                <th style="width:13%">Valor est.</th>
-                <th style="width:18%">Prioridade</th>
-                <th style="width:16%">Status</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>${rows || vazio(6)}</tbody>
-          </table>
-        `, null)}`;
+      const rows = (d.cp || []).map(function (x, i) {
+        return '<tr>' +
+          '<td><input value="' + x.n + '" onchange="getMesDados().cp[' + i + '].n=this.value;salvar()" placeholder="Item"></td>' +
+          '<td><input type="number" value="' + x.q + '" onchange="getMesDados().cp[' + i + '].q=this.value;salvar()"></td>' +
+          '<td><input type="number" value="' + x.v + '" onchange="getMesDados().cp[' + i + '].v=this.value;salvar()"></td>' +
+          '<td>' + sel(['Urgente', 'Normal', 'Quando puder'], x.p, 'getMesDados().cp[' + i + '].p=this.value;salvar()') + '</td>' +
+          '<td>' + sel(['Comprar', 'Comprado', 'Cancelado'], x.s, 'getMesDados().cp[' + i + '].s=this.value;salvar()') + '</td>' +
+          '<td style="width:32px"><button class="del" onclick="getMesDados().cp.splice(' + i + ',1);salvar();re()">×</button></td>' +
+          '</tr>';
+      }).join('');
+      return '<div class="hdr"><div><h2>🛒 Lista de compras</h2><p>' + MESES[getMes()] + ' ' + getAno() + '</p></div>' +
+        '<button class="btn btn-acc" onclick="getMesDados().cp.push({n:\'\',q:1,v:0,p:\'Normal\',s:\'Comprar\'});salvar();re()">+ Adicionar item</button></div>' +
+        bloco('🛒', 'Itens para comprar',
+          '<table><thead><tr>' +
+          '<th style="width:28%">Item</th><th style="width:9%">Qtd</th>' +
+          '<th style="width:13%">Valor est.</th><th style="width:18%">Prioridade</th>' +
+          '<th style="width:16%">Status</th><th></th>' +
+          '</tr></thead><tbody>' + (rows || vazio(6)) + '</tbody></table>'
+          , null);
     }
 
     function paginaRegras() {
-      const r = S.rg;
-      const rows = S.mb.map((x, i) => `
-        <tr>
-          <td><input value="${x.n}" onchange="S.mb[${i}].n=this.value;salvar()" placeholder="Nome"></td>
-          <td>${sel(['Petianer','Tutor','Colaborador'], x.c, `S.mb[${i}].c=this.value;salvar()`)}</td>
-          <td><input value="${x.t}" onchange="S.mb[${i}].t=this.value;salvar()" placeholder="Contato"></td>
-          <td style="width:32px"><button class="del" onclick="S.mb.splice(${i},1);salvar();re()">×</button></td>
-        </tr>`).join('');
-
-      return `
-        <div class="hdr">
-          <div>
-            <h2>⚙️ Regras & Membros</h2>
-            <p>Configurações gerais</p>
-          </div>
-        </div>
-
-        ${bloco('👥', 'Cadastro de membros', `
-          <div style="padding:.75rem 14px;border-bottom:1px solid var(--border);display:flex;justify-content:flex-end">
-            <button class="btn btn-acc" onclick="S.mb.push({n:'',c:'Petianer',t:''});salvar();re()">+ Membro</button>
-          </div>
-          <table>
-            <thead>
-              <tr>
-                <th style="width:35%">Nome</th>
-                <th style="width:20%">Cargo</th>
-                <th>Contato</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>${rows || vazio(4, 'Nenhum membro cadastrado.')}</tbody>
-          </table>
-        `, null)}
-
-        ${bloco('📋', 'Regras da caixinha', `
-          <div style="padding:1.25rem">
-            <div class="fi">
-              <label>Valor mensal padrão (R$)</label>
-              <input value="${r.v}" onchange="S.rg.v=this.value;salvar()">
-            </div>
-            <div class="fi">
-              <label>Dia do pagamento</label>
-              <input value="${r.d}" onchange="S.rg.d=this.value;salvar()">
-            </div>
-            <div class="fi">
-              <label>Responsável pela caixinha</label>
-              <input value="${r.r}" onchange="S.rg.r=this.value;salvar()">
-            </div>
-            <div class="fi">
-              <label>Regra de aprovação de gastos</label>
-              <textarea onchange="S.rg.a=this.value;salvar()">${r.a}</textarea>
-            </div>
-            <div class="fi">
-              <label>Outras regras</label>
-              <textarea onchange="S.rg.o=this.value;salvar()">${r.o}</textarea>
-            </div>
-          </div>
-        `, null)}`;
+      const rows = membros.map(function (x, i) {
+        return '<tr>' +
+          '<td><input value="' + x.n + '" onchange="membros[' + i + '].n=this.value;salvar()" placeholder="Nome"></td>' +
+          '<td>' + sel(['Petianer', 'Tutor', 'Colaborador'], x.c, 'membros[' + i + '].c=this.value;salvar()') + '</td>' +
+          '<td><input value="' + x.t + '" onchange="membros[' + i + '].t=this.value;salvar()" placeholder="Contato"></td>' +
+          '<td style="width:32px"><button class="del" onclick="membros.splice(' + i + ',1);salvar();re()">×</button></td>' +
+          '</tr>';
+      }).join('');
+      return '<div class="hdr"><div><h2>⚙️ Regras & Membros</h2><p>Configurações gerais</p></div></div>' +
+        '<div class="aviso">⚠️ <b>Remover um membro</b> só afeta meses futuros. O histórico de meses já registrados é preservado.</div>' +
+        bloco('👥', 'Cadastro de membros',
+          '<div style="padding:.75rem 14px;border-bottom:1px solid var(--border);display:flex;justify-content:flex-end">' +
+          '<button class="btn btn-acc" onclick="membros.push({n:\'\',c:\'Petianer\',t:\'\'});salvar();re()">+ Membro</button>' +
+          '</div>' +
+          '<table><thead><tr>' +
+          '<th style="width:35%">Nome</th><th style="width:20%">Cargo</th><th>Contato</th><th></th>' +
+          '</tr></thead><tbody>' + (rows || vazio(4, 'Nenhum membro cadastrado.')) + '</tbody></table>'
+          , null) +
+        bloco('📋', 'Regras da caixinha',
+          '<div style="padding:1.25rem">' +
+          '<div class="fi"><label>Valor mensal padrão (R$)</label><input value="' + regras.v + '" onchange="regras.v=this.value;salvar()"></div>' +
+          '<div class="fi"><label>Dia do pagamento</label><input value="' + regras.d + '" onchange="regras.d=this.value;salvar()"></div>' +
+          '<div class="fi"><label>Responsável pela caixinha</label><input value="' + regras.r + '" onchange="regras.r=this.value;salvar()"></div>' +
+          '<div class="fi"><label>Regra de aprovação de gastos</label><textarea onchange="regras.a=this.value;salvar()">' + regras.a + '</textarea></div>' +
+          '<div class="fi"><label>Outras regras</label><textarea onchange="regras.o=this.value;salvar()">' + regras.o + '</textarea></div>' +
+          '</div>'
+          , null);
     }
 
     carregar();
@@ -691,4 +771,5 @@
     re();
   </script>
 </body>
+
 </html>
