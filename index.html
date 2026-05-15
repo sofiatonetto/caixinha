@@ -742,7 +742,7 @@
       const rows = membros.map(function (x, i) {
         return '<tr>' +
           '<td><input value="' + x.n + '" onchange="membros[' + i + '].n=this.value;salvar()" placeholder="Nome"></td>' +
-          '<td>' + sel(['Petianer', 'Tutor', 'Colaborador'], x.c, 'membros[' + i + '].c=this.value;salvar()') + '</td>' +
+          '<td>' + sel(['Petiano', 'Tutor'], x.c, 'membros[' + i + '].c=this.value;salvar()') + '</td>' +
           '<td><input value="' + x.t + '" onchange="membros[' + i + '].t=this.value;salvar()" placeholder="Contato"></td>' +
           '<td style="width:32px"><button class="del" onclick="membros.splice(' + i + ',1);salvar();re()">×</button></td>' +
           '</tr>';
@@ -762,7 +762,6 @@
           '<div class="fi"><label>Valor mensal padrão (R$)</label><input value="' + regras.v + '" onchange="regras.v=this.value;salvar()"></div>' +
           '<div class="fi"><label>Dia do pagamento</label><input value="' + regras.d + '" onchange="regras.d=this.value;salvar()"></div>' +
           '<div class="fi"><label>Responsável pela caixinha</label><input value="' + regras.r + '" onchange="regras.r=this.value;salvar()"></div>' +
-          '<div class="fi"><label>Regra de aprovação de gastos</label><textarea onchange="regras.a=this.value;salvar()">' + regras.a + '</textarea></div>' +
           '<div class="fi"><label>Outras regras</label><textarea onchange="regras.o=this.value;salvar()">' + regras.o + '</textarea></div>' +
           '</div>'
           , null);
